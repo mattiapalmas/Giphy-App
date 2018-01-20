@@ -1,0 +1,2 @@
+include ':app'
+include 'GiphySampleApp', ':library_gift:android-gif-drawable-1.2.10'

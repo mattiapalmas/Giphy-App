@@ -1,0 +1,112 @@
+plugins {
+	id "com.jfrog.bintray" version "1.8.0"
+	id "pl.droidsonroids.ui.test" version "2.0.0"
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'jacoco-android'
+apply from: 'gradle-mvn-push.gradle'
+
+version = VERSION_NAME
+group = GROUP
+
+android {
+	compileSdkVersion versions.compileSdk
+	buildToolsVersion versions.buildTools
+
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_7
+		targetCompatibility JavaVersion.VERSION_1_7
+	}
+
+	defaultConfig {
+		versionName project.version
+		minSdkVersion versions.minSdk
+		targetSdkVersion versions.targetSdk
+		consumerProguardFiles 'consumer-proguard-rules.pro'
+		testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+		externalNativeBuild {
+			cmake {
+				arguments "-DANDROID_PLATFORM=android-$versions.minSdk"
+				cFlags '-std=c11', '-Weverything', '-Wall'
+				if (isDebugBuild()) {
+					cFlags '-DDEBUG', '-g'
+				} else {
+					cFlags '-DNDEBUG', '-Os', '-g0', '-fvisibility=hidden'
+				}
+				abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "mips", "mips64", "x86", "x86_64"
+			}
+		}
+	}
+	externalNativeBuild {
+		cmake {
+			path 'src/main/c/CMakeLists.txt'
+		}
+	}
+	testBuildType 'release'
+	signingConfigs {
+		release {
+			storeFile new File("$System.env.HOME/.android/debug.keystore")
+			storePassword 'android'
+			keyAlias 'androiddebugkey'
+			keyPassword 'android'
+		}
+	}
+	buildTypes {
+		release {
+			signingConfig signingConfigs.release
+			if (isDebugBuild()) {
+				debuggable true
+				jniDebuggable true
+			}
+		}
+	}
+	testOptions {
+		unitTests.returnDefaultValues = true
+	}
+}
+
+dependencies {
+	compileOnly "com.android.support:support-annotations:$versions.androidSupport"
+	testCompileOnly "com.android.support:support-annotations:$versions.androidSupport"
+	testImplementation 'junit:junit:4.12'
+	testImplementation 'org.mockito:mockito-core:2.13.0'
+	testImplementation 'org.robolectric:robolectric:3.5.1'
+	testImplementation 'org.assertj:assertj-core:3.8.0'
+	testImplementation 'net.jodah:concurrentunit:0.4.3'
+	testImplementation 'org.khronos:opengl-api:gl1.1-android-2.1_r1'
+	androidTestImplementation 'junit:junit:4.12'
+	androidTestImplementation 'org.assertj:assertj-core:1.7.1'
+	androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
+	androidTestCompileOnly "com.android.support:support-annotations:$versions.androidSupport"
+	androidTestImplementation "com.android.support.test:runner:$versions.androidSupportTest"
+	androidTestImplementation "com.android.support.test:rules:$versions.androidSupportTest"
+}
+
+jacocoAndroidUnitTestReport {
+	html.enabled true
+	xml.enabled true
+}
+
+bintray {
+	user = POM_DEVELOPER_ID
+	key = BINTRAY_API_KEY
+	pkg {
+		repo = 'maven'
+		name = "$group:$POM_ARTIFACT_ID"
+		licenses = ['MIT']
+	}
+	configurations = ['archives']
+}
+
+def isDebugBuild() {
+	!gradle.startParameter.taskNames.contains("uploadArchives") && VERSION_NAME.contains("SNAPSHOT")
+}
+
+task archiveSymbols(type: Tar) {
+	from new File(buildDir, 'intermediates/cmake/release/obj')
+	baseName = "$POM_ARTIFACT_ID-symbols"
+	destinationDir = new File(buildDir, 'libs')
+	extension = 'tar.gz'
+	compression = Compression.GZIP
+}
