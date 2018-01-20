@@ -27,18 +27,13 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout=findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab1"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("Tab2"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Giphy"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Favourites"));
         mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-
 
         mViewPager = findViewById(R.id.view_pager);
         Pager adapter=new Pager(getSupportFragmentManager(), mTabLayout.getTabCount());
         mViewPager.setAdapter(adapter);
-
-
-
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

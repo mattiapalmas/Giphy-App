@@ -33,6 +33,8 @@ public class AdaptorRecycleViewGiphy extends RecyclerView.Adapter<AdaptorRecycle
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_recycler_view,parent,false);
+
+        favouriteGiphyList = new ArrayList<>();
         return new ViewHolder(view);
     }
 
@@ -44,21 +46,19 @@ public class AdaptorRecycleViewGiphy extends RecyclerView.Adapter<AdaptorRecycle
         holder.gitImageView.loadData(x, "text/html", "utf-8");
         holder.starPrefBtn.setTag(position);
 
-        favouriteGiphyList = new ArrayList<>();
-
 
         holder.starPrefBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!listItem.isFavourite()){
                         view.setBackgroundResource(R.drawable.stargold);
-                        favouriteGiphyList.add(listItem);
                     listItem.setFavourite(true);
+                    favouriteGiphyList.add(listItem);
                 }
                 else {
                     view.setBackgroundResource(R.drawable.stargrey);
-                    favouriteGiphyList.remove(listItem);
                     listItem.setFavourite(false);
+                    favouriteGiphyList.remove(listItem);
                 }
             }
         });

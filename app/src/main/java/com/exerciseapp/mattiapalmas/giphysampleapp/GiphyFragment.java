@@ -95,7 +95,6 @@ public class GiphyFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        progressDialog.dismiss();
                         try {
                             listItems.clear();
                             JSONObject jsonObject = new JSONObject(response);
@@ -128,5 +127,6 @@ public class GiphyFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
+        progressDialog.dismiss();
     }
 }
