@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.exerciseapp.mattiapalmas.giphysampleapp.FirstFragment">
+    tools:context="com.exerciseapp.mattiapalmas.giphysampleapp.GiphyFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <SearchView

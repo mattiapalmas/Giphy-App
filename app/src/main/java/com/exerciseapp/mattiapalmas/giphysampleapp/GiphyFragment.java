@@ -10,9 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,16 +24,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FirstFragment extends Fragment {
+public class GiphyFragment extends Fragment {
 
     private List<GiphyModule> listItems;
     private RecyclerView.Adapter adapter;
@@ -43,7 +38,7 @@ public class FirstFragment extends Fragment {
     private View view;
     private SearchView searchView;
 
-    public FirstFragment() {
+    public GiphyFragment() {
         // Required empty public constructor
     }
 
@@ -52,7 +47,7 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_first, container, false);
+        view = inflater.inflate(R.layout.fragment_giphy, container, false);
 
         loadRecyclerViewData();
         onSearchApply();
@@ -110,11 +105,11 @@ public class FirstFragment extends Fragment {
                                 JSONObject arrayImg = objData.optJSONObject("images");
                                 JSONObject ogjImg = arrayImg.getJSONObject("fixed_height");
                                 GiphyModule item = new GiphyModule(
-                                        ogjImg.getString("url")
+                                        ogjImg.getString("url"),false
                                 );
                                 listItems.add(item);
                             }
-                            adapter = new AdaptorRecycleView(listItems,getActivity().getApplicationContext());
+                            adapter = new AdaptorRecycleViewGiphy(listItems,getActivity().getApplicationContext());
                             recycleView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {

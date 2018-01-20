@@ -14,7 +14,7 @@
             android:layout_height="150dp"
             android:layout_gravity="center"
             android:focusable="false"
-            android:background="@drawable/stargold"/>
+            android:background="@color/colorAccent"/>
     </LinearLayout>
 
     <View

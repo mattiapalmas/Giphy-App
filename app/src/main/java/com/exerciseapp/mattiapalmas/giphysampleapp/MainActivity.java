@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 mTabLayout.setScrollPosition(position, 0, true);
                 mTabLayout.setSelected(true);
+                FavouriteFragment.loadRecyclerViewData();
 
             }
 
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
+                FavouriteFragment.loadRecyclerViewData();
             }
 
             @Override

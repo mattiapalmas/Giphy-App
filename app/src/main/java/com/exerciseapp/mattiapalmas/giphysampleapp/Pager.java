@@ -1,10 +1,7 @@
 package com.exerciseapp.mattiapalmas.giphysampleapp;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
@@ -24,10 +21,10 @@ public class Pager extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch(position){
             case 0 :
-                FirstFragment firstFragment=new FirstFragment();
+                GiphyFragment firstFragment=new GiphyFragment();
                 return firstFragment;
             case 1 :
-                SecondFragment secondFragment=new SecondFragment();
+                FavouriteFragment secondFragment=new FavouriteFragment();
                 return secondFragment;
             default: return null;
         }
