@@ -3,6 +3,7 @@
     package="com.exerciseapp.mattiapalmas.giphysampleapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"></uses-permission>
 
     <application
         android:allowBackup="true"

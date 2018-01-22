@@ -10,21 +10,22 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/colorAccent"
-        android:text="The Giphy World!"
+        android:background="#052e5c"
         android:gravity="center"
-        android:textColor="#fff"/>
+        android:text="The Giphy World!"
+        android:textColor="#fff" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ecbe35"/>
 
 
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

@@ -10,10 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +29,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class GiphyFragment extends Fragment {
     private RecyclerView recycleView;
     private View view;
     private SearchView searchView;
+    private WebView webView;
 
     public GiphyFragment() {
         // Required empty public constructor
@@ -58,7 +61,6 @@ public class GiphyFragment extends Fragment {
 
         loadRecyclerViewData();
         onSearchApply();
-
         return view;
     }
 
@@ -70,21 +72,30 @@ public class GiphyFragment extends Fragment {
         recycleView.setHasFixedSize(true);
         recycleView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        loadGiphyFromApi("http://api.giphy.com/v1/gifs/trending?api_key=RAIzgn1AXLAj6rQ57Sl97OwH92xh4s5f&limit=1000");
+        try {
+            loadGiphyFromApi("http://api.giphy.com/v1/gifs/trending?api_key=RAIzgn1AXLAj6rQ57Sl97OwH92xh4s5f&limit=1000");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     // On search Giphy clicked
     private void onSearchApply() {
-        searchView = view.findViewById(R.id.search_view);
 
+
+        searchView = view.findViewById(R.id.search_view);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 ProgressDialog progressDialog = new ProgressDialog(view.getContext());
                 progressDialog.setMessage("Loading Giphy");
                 progressDialog.show();
-                loadGiphyFromApi("http://api.giphy.com/v1/gifs/search?q="+ s +"&api_key=RAIzgn1AXLAj6rQ57Sl97OwH92xh4s5f&limit=1000");
+                try {
+                    loadGiphyFromApi("http://api.giphy.com/v1/gifs/search?q=" + s + "&api_key=RAIzgn1AXLAj6rQ57Sl97OwH92xh4s5f&limit=1000");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 searchView.clearFocus();
                 progressDialog.dismiss();
                 return false;
@@ -98,15 +109,25 @@ public class GiphyFragment extends Fragment {
     }
 
     // Calling Api to get Giphy
-    private void loadGiphyFromApi(String request){
+    private void loadGiphyFromApi(String request) throws IOException {
 
         RecyclerViewClickListener listener = (view, position) -> {
-            if (!listItems.get(position).isFavourite()){
+            if (!listItems.get(position).isFavourite()) {
                 listItems.get(position).setFavourite(true);
                 view.setBackgroundResource(R.drawable.stargold);
                 MainActivity.favouriteGiphyList.add(listItems.get(position));
-            }
-            else {
+
+                String tempFile = null;
+                for (GiphyModule giphyModule : MainActivity.favouriteGiphyList) {
+                    FileOutputStream fos = view.getContext().openFileOutput("key", view.getContext().MODE_PRIVATE);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    oos.writeObject(MainActivity.favouriteGiphyList);
+                    oos.close();
+                    fos.close();
+                }
+
+
+            } else {
                 listItems.get(position).setFavourite(false);
                 view.setBackgroundResource(R.drawable.stargrey);
                 MainActivity.favouriteGiphyList.remove(listItems.get(position));
@@ -126,12 +147,12 @@ public class GiphyFragment extends Fragment {
                                 JSONObject arrayImg = objData.optJSONObject("images");
                                 JSONObject ogjImg = arrayImg.getJSONObject("fixed_height");
                                 GiphyModule item = new GiphyModule(
-                                        ogjImg.getString("url"),false
+                                        ogjImg.getString("url"), false
                                 );
                                 listItems.add(item);
                             }
 
-                            adapter = new AdaptorRecycleViewGiphy(listItems,getActivity().getApplicationContext(),listener);
+                            adapter = new AdaptorRecycleViewGiphy(listItems, getActivity().getApplicationContext(), listener);
                             recycleView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
@@ -142,7 +163,7 @@ public class GiphyFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("error", "error connecting api: " +error);
+                        Log.e("error", "error connecting api: " + error);
                         Log.d("point", "point2332");
                     }
                 }

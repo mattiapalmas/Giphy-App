@@ -1,4 +1,4 @@
-package com.exerciseapp.mattiapalmas.giphysampleapp.Presenters;
+package com.exerciseapp.mattiapalmas.giphysampleapp.Modules;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,21 +15,22 @@ public class Pager extends FragmentStatePagerAdapter {
 
     int tabCount;
 
-    public Pager(FragmentManager fm, int tabCount){
+    public Pager(FragmentManager fm, int tabCount) {
         super(fm);
-        this.tabCount=tabCount;
+        this.tabCount = tabCount;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch(position){
-            case 0 :
-                GiphyFragment firstFragment=new GiphyFragment();
+        switch (position) {
+            case 0:
+                GiphyFragment firstFragment = new GiphyFragment();
                 return firstFragment;
-            case 1 :
-                FavouriteFragment secondFragment=new FavouriteFragment();
+            case 1:
+                FavouriteFragment secondFragment = new FavouriteFragment();
                 return secondFragment;
-            default: return null;
+            default:
+                return null;
         }
     }
 

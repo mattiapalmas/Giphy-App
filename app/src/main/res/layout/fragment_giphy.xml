@@ -6,23 +6,21 @@
     tools:context="com.exerciseapp.mattiapalmas.giphysampleapp.Views.GiphyFragment">
 
 
-
     <SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="50dp" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:background="@color/colorAccent"/>
+        android:layout_height="1dp"
+        android:background="#0a0e5b" />
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_marginTop="10dp"></android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

@@ -13,6 +13,7 @@ import com.exerciseapp.mattiapalmas.giphysampleapp.Modules.GiphyModule;
 import com.exerciseapp.mattiapalmas.giphysampleapp.R;
 import com.exerciseapp.mattiapalmas.giphysampleapp.Views.MainActivity;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,17 +24,19 @@ public class AdaptorRecyclerViewFavourite extends RecyclerView.Adapter<AdaptorRe
 
     List<GiphyModule> giphy;
     private Context context;
+    private RecyclerViewClickListener mListener;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_pref_recycler_view,parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, mListener);
     }
 
-    public AdaptorRecyclerViewFavourite(List<GiphyModule> giphy, Context context) {
+    public AdaptorRecyclerViewFavourite(List<GiphyModule> giphy, Context context, RecyclerViewClickListener listener) {
         this.giphy = giphy;
         this.context = context;
+        mListener = listener;
     }
 
     @Override
@@ -43,27 +46,6 @@ public class AdaptorRecyclerViewFavourite extends RecyclerView.Adapter<AdaptorRe
 
         String x = "<!DOCTYPE html><html><body><img src=\""+ listItem.getGifUrl() +"\" width=\"250px\" height=\"150px\"></body></html>";
         holder.git_pref_image_view.loadData(x, "text/html", "utf-8");
-
-        holder.git_pref_image_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setMessage("You want to delete it from favourites?");
-
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        listItem.setFavourite(false);
-                        MainActivity.favouriteGiphyList.remove(listItem);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-            }
-        });
     }
 
     @Override
@@ -75,13 +57,24 @@ public class AdaptorRecyclerViewFavourite extends RecyclerView.Adapter<AdaptorRe
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private WebView git_pref_image_view;
+        private RecyclerViewClickListener mListener;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
             git_pref_image_view = itemView.findViewById(R.id.git_pref_image_view);
+            mListener = listener;
+        }
+
+        @Override
+        public void onClick(View view) {
+            try {
+                mListener.onClick(view, getAdapterPosition());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

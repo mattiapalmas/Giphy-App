@@ -6,14 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.exerciseapp.mattiapalmas.giphysampleapp.Modules.GiphyModule;
 import com.exerciseapp.mattiapalmas.giphysampleapp.R;
 import com.exerciseapp.mattiapalmas.giphysampleapp.Views.MainActivity;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -49,7 +49,7 @@ public class AdaptorRecycleViewGiphy extends RecyclerView.Adapter<AdaptorRecycle
         listItem = listItems.get(position);
 
         String x = "<!DOCTYPE html><html><body><img src=\""+ listItem.getGifUrl() +"\" width=\"250px\" height=\"150px\"></body></html>";
-        holder.gitImageView.loadData(x, "text/html", "utf-8");
+        holder.giphyImageView.loadData(x, "text/html", "utf-8");
 
         if (listItem.isFavourite()){
             holder.starPrefBtn.setBackgroundResource(R.drawable.stargold);
@@ -68,21 +68,37 @@ public class AdaptorRecycleViewGiphy extends RecyclerView.Adapter<AdaptorRecycle
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private RecyclerViewClickListener mListener;
-        public WebView gitImageView;
+        public WebView giphyImageView;
         public ImageButton starPrefBtn;
 
         public ViewHolder(View itemView, RecyclerViewClickListener listener) {
             super(itemView);
-            gitImageView = itemView.findViewById(R.id.git_image_view);
+            giphyImageView = itemView.findViewById(R.id.giphy_image_view);
             starPrefBtn = itemView.findViewById(R.id.pref_star_btn);
 
             mListener = listener;
             starPrefBtn.setOnClickListener(this);
+
+            giphyImageView.setWebViewClient(new WebViewClient() {
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+
+
+                public void onPageFinished(WebView view, String url) {
+                    MainActivity.progressDialog.dismiss();
+                }
+            });
         }
 
         @Override
         public void onClick(View view) {
-            mListener.onClick(view, getAdapterPosition());
+            try {
+                mListener.onClick(view, getAdapterPosition());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

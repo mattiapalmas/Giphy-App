@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:orientation="horizontal">
+
         <WebView
-            android:id="@+id/git_image_view"
+            android:id="@+id/giphy_image_view"
             android:layout_width="0dp"
-            android:layout_weight="5"
             android:layout_height="150dp"
             android:layout_gravity="center"
-            android:focusable="false"/>
+            android:layout_weight="5"
+            android:focusable="false" />
 
         <ImageButton
             android:id="@+id/pref_star_btn"
             android:layout_width="0dp"
             android:layout_height="100px"
-            android:layout_weight="1"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="10dp"
             android:layout_gravity="center"
-            android:background="@drawable/stargrey"/>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/stargrey" />
 
     </LinearLayout>
 
