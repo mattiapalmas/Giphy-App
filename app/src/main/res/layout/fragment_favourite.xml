@@ -3,7 +3,7 @@
     android:id="@+id/rel_layout_pref"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.exerciseapp.mattiapalmas.giphysampleapp.FavouriteFragment">
+    tools:context="com.exerciseapp.mattiapalmas.giphysampleapp.Views.FavouriteFragment">
 
     <!-- TODO: Update blank fragment layout -->
 

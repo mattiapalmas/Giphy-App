@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.exerciseapp.mattiapalmas.giphysampleapp.MainActivity">
+    tools:context="com.exerciseapp.mattiapalmas.giphysampleapp.Views.MainActivity">
 
     <TextView
         android:layout_width="match_parent"

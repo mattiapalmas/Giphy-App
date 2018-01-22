@@ -1,4 +1,4 @@
-package com.exerciseapp.mattiapalmas.giphysampleapp;
+package com.exerciseapp.mattiapalmas.giphysampleapp.Modules;
 
 /**
  * Created by mattia palmas on 2018-01-18.

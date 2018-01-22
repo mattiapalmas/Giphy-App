@@ -1,4 +1,4 @@
-package com.exerciseapp.mattiapalmas.giphysampleapp;
+package com.exerciseapp.mattiapalmas.giphysampleapp.Views;
 
 
 import android.app.ProgressDialog;
@@ -10,7 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,6 +21,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.exerciseapp.mattiapalmas.giphysampleapp.Presenters.AdaptorRecycleViewGiphy;
+import com.exerciseapp.mattiapalmas.giphysampleapp.Modules.GiphyModule;
+import com.exerciseapp.mattiapalmas.giphysampleapp.Presenters.RecyclerViewClickListener;
+import com.exerciseapp.mattiapalmas.giphysampleapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,6 +58,7 @@ public class GiphyFragment extends Fragment {
 
         loadRecyclerViewData();
         onSearchApply();
+
         return view;
     }
 
@@ -73,8 +81,12 @@ public class GiphyFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                ProgressDialog progressDialog = new ProgressDialog(view.getContext());
+                progressDialog.setMessage("Loading Giphy");
+                progressDialog.show();
                 loadGiphyFromApi("http://api.giphy.com/v1/gifs/search?q="+ s +"&api_key=RAIzgn1AXLAj6rQ57Sl97OwH92xh4s5f&limit=1000");
                 searchView.clearFocus();
+                progressDialog.dismiss();
                 return false;
             }
 
@@ -87,9 +99,19 @@ public class GiphyFragment extends Fragment {
 
     // Calling Api to get Giphy
     private void loadGiphyFromApi(String request){
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage("Loading Data...");
-        progressDialog.show();
+
+        RecyclerViewClickListener listener = (view, position) -> {
+            if (!listItems.get(position).isFavourite()){
+                listItems.get(position).setFavourite(true);
+                view.setBackgroundResource(R.drawable.stargold);
+                MainActivity.favouriteGiphyList.add(listItems.get(position));
+            }
+            else {
+                listItems.get(position).setFavourite(false);
+                view.setBackgroundResource(R.drawable.stargrey);
+                MainActivity.favouriteGiphyList.remove(listItems.get(position));
+            }
+        };
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, request,
                 new Response.Listener<String>() {
@@ -108,7 +130,8 @@ public class GiphyFragment extends Fragment {
                                 );
                                 listItems.add(item);
                             }
-                            adapter = new AdaptorRecycleViewGiphy(listItems,getActivity().getApplicationContext());
+
+                            adapter = new AdaptorRecycleViewGiphy(listItems,getActivity().getApplicationContext(),listener);
                             recycleView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
@@ -127,6 +150,7 @@ public class GiphyFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         requestQueue.add(stringRequest);
-        progressDialog.dismiss();
     }
+
+
 }

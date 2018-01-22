@@ -1,8 +1,11 @@
-package com.exerciseapp.mattiapalmas.giphysampleapp;
+package com.exerciseapp.mattiapalmas.giphysampleapp.Presenters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.exerciseapp.mattiapalmas.giphysampleapp.Views.FavouriteFragment;
+import com.exerciseapp.mattiapalmas.giphysampleapp.Views.GiphyFragment;
 
 /**
  * Created by mattia palmas on 2018-01-18.

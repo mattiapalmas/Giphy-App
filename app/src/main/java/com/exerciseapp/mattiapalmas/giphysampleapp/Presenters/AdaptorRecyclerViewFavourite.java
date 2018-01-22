@@ -1,12 +1,17 @@
-package com.exerciseapp.mattiapalmas.giphysampleapp;
+package com.exerciseapp.mattiapalmas.giphysampleapp.Presenters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.TextView;
+
+import com.exerciseapp.mattiapalmas.giphysampleapp.Modules.GiphyModule;
+import com.exerciseapp.mattiapalmas.giphysampleapp.R;
+import com.exerciseapp.mattiapalmas.giphysampleapp.Views.MainActivity;
 
 import java.util.List;
 
@@ -38,6 +43,27 @@ public class AdaptorRecyclerViewFavourite extends RecyclerView.Adapter<AdaptorRe
 
         String x = "<!DOCTYPE html><html><body><img src=\""+ listItem.getGifUrl() +"\" width=\"250px\" height=\"150px\"></body></html>";
         holder.git_pref_image_view.loadData(x, "text/html", "utf-8");
+
+        holder.git_pref_image_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("You want to delete it from favourites?");
+
+                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        listItem.setFavourite(false);
+                        MainActivity.favouriteGiphyList.remove(listItem);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+            }
+        });
     }
 
     @Override

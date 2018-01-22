@@ -1,16 +1,23 @@
-package com.exerciseapp.mattiapalmas.giphysampleapp;
+package com.exerciseapp.mattiapalmas.giphysampleapp.Views;
 
-import android.graphics.PorterDuff;
+import android.app.ProgressDialog;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.exerciseapp.mattiapalmas.giphysampleapp.Modules.GiphyModule;
+import com.exerciseapp.mattiapalmas.giphysampleapp.Presenters.Pager;
+import com.exerciseapp.mattiapalmas.giphysampleapp.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
+    public static List<GiphyModule> favouriteGiphyList;
 
 
     @Override
@@ -26,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private void setUpTabs() {
         mTabLayout=findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+        favouriteGiphyList = new ArrayList<>();
 
         mTabLayout.addTab(mTabLayout.newTab().setText("Giphy"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Favourites"));
@@ -45,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 mTabLayout.setScrollPosition(position, 0, true);
                 mTabLayout.setSelected(true);
-                FavouriteFragment.loadRecyclerViewData();
-
+                FavouriteFragment.loadRecyclerViewData(favouriteGiphyList);
             }
 
             @Override
@@ -61,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-                FavouriteFragment.loadRecyclerViewData();
+                FavouriteFragment.loadRecyclerViewData(favouriteGiphyList);
             }
 
             @Override
